@@ -70,19 +70,11 @@ int main(int argc, char** argv)
         int dist_x = lm1.x - lm0.x;
         int dist_y = lm4.y - lm2.y;
         // 2点間のユークリッド距離
-        double dist = cv::norm(lm0 - lm1);
+        double dist = cv::norm(lm1 - lm3);
 
         if (dist < 100)
         {
-          left_results = 1;
-        }
-        else if (dist_x < 0)
-        {
           left_results = 0;
-        }
-        else
-        {
-          left_results = 2;
         }
       }
 
@@ -111,19 +103,11 @@ int main(int argc, char** argv)
         int dist_x = lm1.x - lm0.x;
         int dist_y = lm4.y - lm2.y;
         // 2点間のユークリッド距離
-        double dist = cv::norm(lm0 - lm1);
+        double dist = cv::norm(lm1 - lm3);
 
         if (dist < 100)
         {
-          right_results = 1;
-        }
-        else if (dist_x > 0)
-        {
           right_results = 0;
-        }
-        else
-        {
-          right_results = 2;
         }
       }
 

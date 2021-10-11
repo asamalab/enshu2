@@ -177,7 +177,6 @@ int main(int argc, char** argv)
           // 目的とする距離[mm]
           double depth_thresh = 800;
           int shifted_value = 0;
-          // int shifted_value = width * baseline / (2*depth_thresh*std::tan(fov_deg/180.0*M_PI/2));
           int shifted_i = i + shifted_value;
 
           // Depth in [mm]
