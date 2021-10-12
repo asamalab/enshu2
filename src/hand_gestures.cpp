@@ -3,14 +3,14 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "enshu2/my_camera.hpp"
+#include "enshu2/gesture_camera.hpp"
 
 ///////////////////////////////////////////////////
 int main(int argc, char** argv)
 {
   // ROS node
   ros::init(argc, argv, "enshu2_hand");
-  MyCamera camera;
+  GestureCamera camera;
 
   // Font setting
   std::string text_contents;

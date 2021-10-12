@@ -3,7 +3,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-#include "enshu2/my_camera.hpp"
+#include "enshu2/gesture_camera.hpp"
 #include "enshu2/myrobot.h"
 
 ///////////////////////////////////////////////////
@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 {
   // ROS node
   ros::init(argc, argv, "enshu2_control");
-  MyCamera camera;
+  GestureCamera camera;
   MyRobot robot;
 
   // Font setting

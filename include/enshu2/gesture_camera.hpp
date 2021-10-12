@@ -7,7 +7,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-class MyCamera
+class GestureCamera
 {
 private:
   ros::Subscriber result_sub_;
@@ -58,10 +58,10 @@ private:
   }
 
 public:
-  MyCamera()
+  GestureCamera()
   {
     ros::NodeHandle n;
-    result_sub_ = n.subscribe("/hand_results", 2, &MyCamera::result_callback, this);
+    result_sub_ = n.subscribe("/hand_results", 2, &GestureCamera::result_callback, this);
     ROS_INFO("Subscribe hand detection results: /hand_results");
     t_start_ = ros::Time::now();
 
