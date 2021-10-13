@@ -45,7 +45,7 @@ int main(int argc, char** argv)
     for (int i = 0; i < width; i++)
     {
       // i: 横インデックス，j:縦インデックス
-      // OpenCV load color [blue, greee, red]
+      // OpenCV load color [blue, green, red]
       // 8 bit color: 0, ..., 255
       int b = img.at<cv::Vec3b>(j, i)[0];
       int g = img.at<cv::Vec3b>(j, i)[1];
