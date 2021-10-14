@@ -33,7 +33,7 @@ public:
     t_start_ = ros::Time::now();
   }
 
-  void image_callback(const sensor_msgs::ImageConstPtr& rgb_msg)
+  void image_callback(const sensor_msgs::ImageConstPtr &rgb_msg)
   {
     // Load RGB messages
     cv_bridge::CvImagePtr rgb_ptr;
@@ -41,7 +41,7 @@ public:
     {
       rgb_ptr = cv_bridge::toCvCopy(rgb_msg, sensor_msgs::image_encodings::BGR8);
     }
-    catch (cv_bridge::Exception& e)
+    catch (cv_bridge::Exception &e)
     {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
@@ -49,7 +49,7 @@ public:
     img_ = rgb_ptr->image.clone();
   }
 
-  void depth_callback(const sensor_msgs::ImageConstPtr& depth_msg)
+  void depth_callback(const sensor_msgs::ImageConstPtr &depth_msg)
   {
     // Load Depth messages
     cv_bridge::CvImagePtr depth_ptr;
@@ -57,7 +57,7 @@ public:
     {
       depth_ptr = cv_bridge::toCvCopy(depth_msg, sensor_msgs::image_encodings::TYPE_16UC1);
     }
-    catch (cv_bridge::Exception& e)
+    catch (cv_bridge::Exception &e)
     {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
@@ -76,6 +76,7 @@ public:
           };
         }
       }
+
       cv::resize(depth_, depth_, img_.size(), cv::INTER_NEAREST);
     }
   }
@@ -102,7 +103,7 @@ public:
 };
 
 ///////////////////////////////////////////////////
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   // ROS node
   ros::init(argc, argv, "enshu2_zoom");
@@ -117,6 +118,7 @@ int main(int argc, char** argv)
     return -1;
   }
 
+  int blur_size = 21;  // odd
   // Main loop
   ros::Rate rate(10);
   while (ros::ok())
@@ -136,53 +138,39 @@ int main(int argc, char** argv)
       int center_depth = depth.at<unsigned short>(center_j, center_i);
       ROS_INFO("center depth: %d [m]", center_depth);
 
-      // Convert rgb color into hsv color
-      cv::cvtColor(org, img, cv::COLOR_BGR2HSV);
-      cv::cvtColor(bg_img, bg_img, cv::COLOR_BGR2HSV);
+      //ぼかし画像
+      cv::Mat blurred_img;
+      cv::blur(img, blurred_img, cv::Size(blur_size, blur_size));
+
       for (int j = 0; j < height; j++)
       {
         for (int i = 0; i < width; i++)
         {
           // i: 横インデックス，j:縦インデックス
-          // [hue, saturation, value(brightness)]
-          // hue: 0, ..., 179
-          // saturation, value (8 bit): 0, ..., 255
-          int h = img.at<cv::Vec3b>(j, i)[0];
-          int s = img.at<cv::Vec3b>(j, i)[1];
-          int v = img.at<cv::Vec3b>(j, i)[2];
 
-          // Background image value
-          int h_bg = bg_img.at<cv::Vec3b>(j, i)[0];
-          int s_bg = bg_img.at<cv::Vec3b>(j, i)[1];
-          int v_bg = bg_img.at<cv::Vec3b>(j, i)[2];
+          int b = img.at<cv::Vec3b>(j, i)[0];
+          int g = img.at<cv::Vec3b>(j, i)[1];
+          int r = img.at<cv::Vec3b>(j, i)[2];
 
-          // 深度センサと色センサ間のだいたい距離[mm]
-          int baseline = 60;
-          // センサの画角（FoV）[degree]
-          double fov_deg = 80;
-
-          /// <write your code>
-          // 目的とする距離[mm]
-          double depth_thresh = 800;
           int shifted_value = 0;
           int shifted_i = i + shifted_value;
 
-          // Depth in [mm]
+          // 距離 [mm]
           double distance = depth.at<unsigned short>(j, clamp(shifted_i, 0, width - 1));
-          bool is_background = distance > 1200;
+
+          /// <write your code>
+          bool is_background = false;
+
           if (is_background)
           {
-            v = 0;
           }
-          /// </write your code>
 
-          // Write color in the image
-          img.at<cv::Vec3b>(j, i) = hsvclamp(h, s, v);
+          ////////////////////
+
+          img.at<cv::Vec3b>(j, i) = rgbclamp(b, g, r);
         }
       }
-      // Conver hsv color into rgb color
-      cv::cvtColor(img, img, cv::COLOR_HSV2BGR);
-      cv::cvtColor(bg_img, bg_img, cv::COLOR_HSV2BGR);
+
       cv::imshow("img", img);
       cv::Mat depth_viz;
       depth.convertTo(depth_viz, CV_8U, 255 * 1.0 / DEPTH_MAX);
