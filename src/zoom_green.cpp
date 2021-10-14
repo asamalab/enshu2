@@ -28,7 +28,7 @@ public:
     t_start_ = ros::Time::now();
   }
 
-  void image_callback(const sensor_msgs::ImageConstPtr& rgb_msg)
+  void image_callback(const sensor_msgs::ImageConstPtr &rgb_msg)
   {
     // Load RGB messages
     cv_bridge::CvImagePtr rgb_ptr;
@@ -36,7 +36,7 @@ public:
     {
       rgb_ptr = cv_bridge::toCvCopy(rgb_msg, sensor_msgs::image_encodings::BGR8);
     }
-    catch (cv_bridge::Exception& e)
+    catch (cv_bridge::Exception &e)
     {
       ROS_ERROR("cv_bridge exception: %s", e.what());
       return;
@@ -61,7 +61,7 @@ public:
 };
 
 ///////////////////////////////////////////////////
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   // ROS node
   ros::init(argc, argv, "enshu2_zoom");
