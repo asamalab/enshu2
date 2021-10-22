@@ -17,6 +17,7 @@ private:
   cv::Mat img_;
 
   ros::Time t_start_;
+  bool is_finished_;
 
 public:
   MyCamera()
@@ -26,6 +27,7 @@ public:
     image_sub_ = it.subscribe("/camera/color/image_raw", 2, &MyCamera::image_callback, this,
                               image_transport::TransportHints("compressed"));
     t_start_ = ros::Time::now();
+    is_finished_ = false;
   }
 
   void image_callback(const sensor_msgs::ImageConstPtr &rgb_msg)
@@ -56,7 +58,12 @@ public:
 
   void end()
   {
-    ros::shutdown();
+    is_finished_ = true;
+  }
+
+  bool is_finished()
+  {
+    return is_finished_;
   }
 };
 
@@ -78,7 +85,7 @@ int main(int argc, char **argv)
 
   // Main loop
   ros::Rate rate(10);
-  while (ros::ok())
+  while (ros::ok() && !camera.is_finished())
   {
     cv::Mat img = camera.get_img();
     if (!img.empty())

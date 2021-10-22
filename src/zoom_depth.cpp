@@ -21,6 +21,7 @@ private:
   cv::Mat depth_;
 
   ros::Time t_start_;
+  bool is_finished_;
 
 public:
   MyCamera()
@@ -31,6 +32,7 @@ public:
                               image_transport::TransportHints("compressed"));
     depth_sub_ = it.subscribe("/camera/depth/image_rect_raw", 2, &MyCamera::depth_callback, this);
     t_start_ = ros::Time::now();
+    is_finished_ = false;
   }
 
   void image_callback(const sensor_msgs::ImageConstPtr &rgb_msg)
@@ -98,7 +100,12 @@ public:
 
   void end()
   {
-    ros::shutdown();
+    is_finished_ = true;
+  }
+
+  bool is_finished()
+  {
+    return is_finished_;
   }
 };
 
@@ -121,7 +128,7 @@ int main(int argc, char **argv)
   int blur_size = 21;  // odd
   // Main loop
   ros::Rate rate(10);
-  while (ros::ok())
+  while (ros::ok() && !camera.is_finished())
   {
     cv::Mat img = camera.get_img();
     cv::Mat depth = camera.get_depth();
