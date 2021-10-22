@@ -1,12 +1,12 @@
-## Repository for 精密工学基礎演習
+## Repository for 精密工学基礎演習 without ROS
 
-### Installation
+### Run the programs
 ```bash
-mkdir -p ~/catkin_ws/src
-cd ~/catkin_ws/src
 git clone https://github.com/asamalab/enshu2.git
-git clone https://github.com/asamalab/enshu_msgs.git
-
-cd ..
-catkin_make
+cd enshu2
+mkdir build && cd build 
+cmake ..
+make
+./0_rgb_process 
+./1_hsv_process 
 ```

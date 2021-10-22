@@ -1,6 +1,4 @@
-#include <ros/package.h>
-#include <ros/ros.h>
-
+#include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -8,16 +6,12 @@
 
 int main(int argc, char** argv)
 {
-  // ROS node
-  ros::init(argc, argv, "enshu2");
-  ros::NodeHandle n;
-
   // Load image template
-  std::string package_path = ros::package::getPath(std::string("enshu2"));
+  std::string package_path = "../";
   cv::Mat img = cv::imread(package_path + "/img/img_before.jpg");
   if (img.empty())
   {
-    ROS_ERROR("Couldn't read image!");
+    std::cerr << "Couldn't read image!";
     return -1;
   }
 
@@ -26,7 +20,7 @@ int main(int argc, char** argv)
   int height = img.rows;
   double center_i = width / 2.0;
   double center_j = height / 2.0;
-  ROS_INFO("Image: %dx%d", height, width);
+  std::cout << "Image:" << height << ", " << width << std::endl;
 
   for (int j = 0; j < height; j++)
   {
