@@ -2,7 +2,7 @@
 
 ### Run the programs
 ```bash
-git clone https://github.com/asamalab/enshu2.git
+git clone https://github.com/asamalab/enshu2.git -b without_ros
 cd enshu2
 mkdir build && cd build 
 cmake ..
