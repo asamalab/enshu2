@@ -118,13 +118,20 @@ int main(int argc, char **argv)
           int s_bg = bg_img.at<cv::Vec3b>(j, i)[1];
           int v_bg = bg_img.at<cv::Vec3b>(j, i)[2];
 
-          /// <write your code>
-          bool is_background = false;
-          if (is_background)
-          {
-            v = 0;
-          }
-          /// </write your code>
+         /// <write your code>
+
+         // Condition to decide background
+         if (s > 240)
+         {
+           // Set brightness zero
+           v = 0;
+
+           // // Replace with virtual background
+           // h = h_bg;
+           // s = s_bg;
+           // v = v_bg;
+         }
+         /// </write your code>
 
           // Write color in the image
           img.at<cv::Vec3b>(j, i) = hsvclamp(h, s, v);
